@@ -2,3 +2,5 @@ Pipfile
 Pipfile.lock
 .vscode/settings.json
 src/ecommerce/__pycache__/
+src/products/migrations/__pycache__/
+src/products/__pycache__/

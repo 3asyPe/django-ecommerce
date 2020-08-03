@@ -12,45 +12,16 @@ def product_list_view(request):
     return render(request, "products/list.html", context)
 
 
-def product_detail_view(request, pk:int):
-    # try:
-    #     instance = Product.objects.get(id=pk)
-    # except Product.DoesNotExist:
-    #     print("no product here")
-    #     raise Http404("Product doesn't exitst")
-    # except:
-    #     print("huh?")
-
-    instance = Product.objects.get_by_id(pk)
-    if instance is None:
-        raise Http404("product doesn't exist")
-    # print(instance)
-    # qs = Product.objects.filter(id=pk)
-    # if qs.exists() and qs.count() == 1:
-    #     instance = qs.first()
-    # else:
-    #     raise Http404("Product doesn't exitst")
-
-    context = {
-        'object': instance
-    }
-
-    return render(request, "products/detail.html", context)
-
-
-def product_featured_list_view(request):
-    queryset = Product.objects.get_by_featured(True)
-    context = {
-        'object_list': queryset
-    }
-    return render(request, "products/list.html", context)
-
-
-def product_featured_detail_view(request, pk:int):
+def product_detail_slug_view(request, slug:str):
     try:
-        instance = Product.objects.get_by_featured(True).get(pk=pk)
+        instance = Product.objects.get(slug=slug, active=True)
     except Product.DoesNotExist:
         raise Http404("Product doesn't exist")
+    except Product.MultipleObjectsReturned:
+        qs = Product.objects.filter(slug=slug, active=True)
+        instance = qs.first()
+    except:
+        raise Http404("hmmm")
     print(instance)
     context = {
         'object': instance
