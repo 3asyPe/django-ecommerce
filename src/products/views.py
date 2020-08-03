@@ -26,4 +26,4 @@ def product_detail_slug_view(request, slug:str):
     context = {
         'object': instance
     }
-    return render(request, "products/featured-detail.html", context)
+    return render(request, "products/detail.html", context)
