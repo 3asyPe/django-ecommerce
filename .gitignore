@@ -4,3 +4,5 @@ Pipfile.lock
 src/ecommerce/__pycache__/
 src/products/migrations/__pycache__/
 src/products/__pycache__/
+src/search/__pycache__/
+src/**/__pycache__/

@@ -2,24 +2,20 @@
 
 {% block content %}
 
+
 <h1>{{ title }}</h1>
-
-<h1>Hello, world!</h1>
-
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <p>{{content}}</p>
-            <div class="col-sm-6 col-12">
-                <form action="" method="post"> {% csrf_token %}
-                    {{ form }}
-                    <button type="submit">Submit</button>
-                </form>
-                <!-- <form action="" method="post"> {% csrf_token %}
-                    <input type="text" placeholder="Name"
-                            name="full_name" class="form-control">
-                </form> -->
-            </div>
+<div class="row">
+    <div class="col">
+        <p>{{content}}</p>
+        <div class="col-sm-6 col-12">
+            <form action="" method="post"> {% csrf_token %}
+                {{ form }}
+                <button type="submit">Submit</button>
+            </form>
+            <!-- <form action="" method="post"> {% csrf_token %}
+                <input type="text" placeholder="Name"
+                        name="full_name" class="form-control">
+            </form> -->
         </div>
     </div>
 </div>
