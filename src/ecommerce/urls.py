@@ -35,6 +35,7 @@ urlpatterns = [
     path("register/", register_page, name="register"),
     path("products/", include("products.urls")),
     path("search/", include("search.urls")),
+    path("cart/", include("carts.urls")),
     path('admin/', admin.site.urls),
 ]
 
