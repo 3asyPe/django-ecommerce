@@ -1,7 +1,10 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import Http404
 
+from carts.services import load_cart
+
 from .models import Product
+from .services import get_product_by_slug
 
 
 def product_list_view(request):
@@ -13,17 +16,10 @@ def product_list_view(request):
 
 
 def product_detail_slug_view(request, slug:str):
-    try:
-        instance = Product.objects.get(slug=slug, active=True)
-    except Product.DoesNotExist:
-        raise Http404("Product doesn't exist")
-    except Product.MultipleObjectsReturned:
-        qs = Product.objects.filter(slug=slug, active=True)
-        instance = qs.first()
-    except:
-        raise Http404("hmmm")
-    print(instance)
+    product = get_product_by_slug(slug=slug)
+    cart = load_cart(user=request.user)
     context = {
-        'object': instance
+        'object': product,
+        'cart': cart,
     }
     return render(request, "products/detail.html", context)

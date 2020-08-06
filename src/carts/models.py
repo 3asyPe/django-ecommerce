@@ -12,8 +12,8 @@ User = settings.AUTH_USER_MODEL
 
 
 class CartManager(models.Manager):
-    def new_or_get(self, user:User, cart_id:Union[int, None]=None):
-        qs = self.get_queryset().filter(id=cart_id)
+    def new_or_get(self, user:User):
+        qs = self.get_queryset().filter(user=user)
         if qs.exists() and qs.count() == 1:
             cart_obj = qs.first()
             if user.is_authenticated and cart_obj.user is None:
