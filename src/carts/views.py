@@ -24,4 +24,4 @@ def cart_update(request):
         cart = load_cart(user=request.user)
         update_cart(product_id=product_id, cart=cart)
         update_cart_part_of_session_data(request, cart=cart)   
-    return redirect("cart:home")
+    return redirect("cart:home") 
