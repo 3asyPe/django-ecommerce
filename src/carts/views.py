@@ -13,7 +13,7 @@ from .services import (
 
 def cart_home(request):
     cart = load_cart(user=request.user)
-    update_cart_part_of_session_data(request, cart=cart)
+    update_cart_part_of_session_data(request)
     context = {
         "cart": cart,
     }
@@ -25,7 +25,7 @@ def cart_update(request):
         product_id = request.POST.get("product_id")
         cart = load_cart(user=request.user)
         update_cart(product_id=product_id, cart=cart)
-        update_cart_part_of_session_data(request, cart=cart)   
+        update_cart_part_of_session_data(request)   
     return redirect("cart:home") 
 
 

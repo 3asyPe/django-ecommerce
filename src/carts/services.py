@@ -24,7 +24,8 @@ def update_cart(product_id: int, cart: Cart) -> Cart:
     return cart
 
 
-def update_cart_part_of_session_data(request, cart: Cart) -> None:
+def update_cart_part_of_session_data(request) -> None:
+    cart = load_cart(user=request.user)
     request.session['cart_items_count'] = cart.products.count()
 
 
