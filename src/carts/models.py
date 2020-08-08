@@ -13,9 +13,9 @@ User = settings.AUTH_USER_MODEL
 
 class CartManager(models.Manager):
     def new_or_get(self, user:User):
-        qs = self.get_queryset().filter(user=user)
-        if qs.exists() and qs.count() == 1:
-            cart_obj = qs.first()
+        qs = self.get_queryset().filter(user=user, active=True)
+        if qs.exists():
+            cart_obj = qs.last()
             if user.is_authenticated and cart_obj.user is None:
                 cart_obj.user = request.user
                 cart_obj.save()
@@ -35,6 +35,7 @@ class Cart(models.Model):
     total = models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
     updated = models.DateTimeField(auto_now=True)
     timestamp = models.DateTimeField(auto_now_add=True)
+    active = models.BooleanField(default=True)
 
     objects = CartManager()
 

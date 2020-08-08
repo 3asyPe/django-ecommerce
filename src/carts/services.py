@@ -1,5 +1,8 @@
 from django.conf import settings
 
+from typing import Union
+
+from orders.models import Order
 from products.models import Product
 from .models import Cart
 
@@ -23,3 +26,13 @@ def update_cart(product_id: int, cart: Cart) -> Cart:
 
 def update_cart_part_of_session_data(request, cart: Cart) -> None:
     request.session['cart_items_count'] = cart.products.count()
+
+
+def load_order(cart: Cart) -> Union[Order, None]:
+    """Return order if cart is not empty else None"""
+    if cart.products.count() == 0:
+        return None
+    
+    order, order_created = Order.objects.get_or_create(cart=cart)
+    return order
+

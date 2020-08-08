@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect
 
+from orders.models import Order
 from products.models import Product
 from .models import Cart
 from .services import (
     load_cart,
+    load_order,
     update_cart,
     update_cart_part_of_session_data,
 )
@@ -25,3 +27,15 @@ def cart_update(request):
         update_cart(product_id=product_id, cart=cart)
         update_cart_part_of_session_data(request, cart=cart)   
     return redirect("cart:home") 
+
+
+def checkout_home(request):
+    cart = load_cart(user=request.user)
+    order = load_order(cart=cart)
+    if order is None:
+        return redirect("cart:home")
+    context = {
+        "order": order
+    }
+    print(order)
+    return render(request, 'carts/checkout.html', context)
