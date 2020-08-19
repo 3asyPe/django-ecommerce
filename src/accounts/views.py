@@ -3,10 +3,27 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 from .services import custom_login, get_next_path
-from .forms import LoginForm, RegisterForm
+from .forms import LoginForm, RegisterForm, GuestForm
+from .models import GuestEmail
 
 
 User = get_user_model()
+
+
+def guest_register_view(request):
+    form = GuestForm(request.POST or None)
+    context = {
+        "form": form
+    }
+
+    if form.is_valid():
+        email = form.cleaned_data.get("email")
+        new_guest_email = GuestEmail.objects.create(email=email)
+        request.session["guest_email_id"] = new_guest_email.id
+        path = get_next_path(request)
+        return redirect(path)
+
+    return redirect("/register/")
 
 
 def login_page(request):
