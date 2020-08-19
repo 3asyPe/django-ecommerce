@@ -2,7 +2,11 @@ from django.contrib.auth import get_user_model
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
-from .services import custom_login, get_next_path
+from .services import (
+    custom_login,
+    get_next_path,
+    get_or_create_guest_email,
+)
 from .forms import LoginForm, RegisterForm, GuestForm
 from .models import GuestEmail
 
@@ -18,8 +22,7 @@ def guest_register_view(request):
 
     if form.is_valid():
         email = form.cleaned_data.get("email")
-        new_guest_email = GuestEmail.objects.create(email=email)
-        request.session["guest_email_id"] = new_guest_email.id
+        get_or_create_guest_email(request, email=email)
         path = get_next_path(request)
         return redirect(path)
 

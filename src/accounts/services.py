@@ -1,19 +1,17 @@
 from django.contrib.auth import authenticate, login
 from django.utils.http import is_safe_url
 
+from typing import Union
+
 from ecommerce.services import update_session_data
+from .models import GuestEmail
 
 
 def custom_login(request, username: str, password: str) -> bool:
     user = authenticate(request, username=username, password=password)
     if user is not None:
         login(request=request, user=user)
-
-        try:
-            del request.session["guest_email_id"]
-        except:
-            pass
-
+        _delete_guest_email_key(request)
         update_session_data(request)
         print("\n\n custom login")
         return True
@@ -29,3 +27,20 @@ def get_next_path(request) -> str:
         return redirect_path
     else:
         return "/"
+
+
+def get_or_create_guest_email(request, email=None) -> Union[GuestEmail, None]:
+    email = request.session.get("guest_email") if email is None else email
+    print("get_guest_email")
+    if email is None:
+        return None
+    guest_email, guest_email_created = GuestEmail.objects.get_or_create(email=email)
+    request.session["guest_email"] = guest_email.email
+    return guest_email
+
+
+def _delete_guest_email_key(request):
+    try:
+        del request.session["guest_email"]
+    except:
+        pass

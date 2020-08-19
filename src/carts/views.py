@@ -2,14 +2,16 @@ from django.shortcuts import render, redirect
 
 from accounts.forms import LoginForm, GuestForm
 from accounts.models import GuestEmail
+from accounts.services import get_or_create_guest_email
 from billing.models import BillingProfile
+from billing.services import load_billing_profile
 from orders.models import Order
+from orders.services import load_order
 from products.models import Product
 from .models import Cart
 from .services import (
     get_cart_and_update_session_data,
     update_cart_and_session_data,
-    load_order,
 )
 
 
@@ -35,26 +37,13 @@ def checkout_home(request):
     if cart.products.count() == 0:
         return redirect("cart:home")
 
-    billing_profile = None
-    user = request.user
     login_form = LoginForm()
     guest_form = GuestForm()
-    guest_email_id = request.session.get("guest_email_id")
-    if user.is_authenticated:
-        billing_profile, billing_profile_created = BillingProfile.objects.get_or_create(
-            user=user,
-            email=user.email
-        )
-    elif guest_email_id is not None:
-        try:
-            guest_email = GuestEmail.objects.get(id=guest_email_id)
-        except GuestEmail.DoesNotExist:
-            request.session["guest_email_id"] = None
-            raise GuestEmail.DoesNotExist
-        billing_profile, billing_profile_created = BillingProfile.objects.get_or_create(
-            email=guest_email.email
-        )
 
+    user = request.user
+    guest_email = get_or_create_guest_email(request)
+    print(f"guest_email-{guest_email}")
+    billing_profile = load_billing_profile(user=user, guest_email=guest_email)
     order = load_order(billing_profile=billing_profile, cart=cart)
 
     print("checkout home")
