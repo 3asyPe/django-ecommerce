@@ -32,7 +32,6 @@ def cart_update(request):
 
 def checkout_home(request):
     cart = get_cart_and_update_session_data(request)
-    order = None
     if cart.products.count() == 0:
         return redirect("cart:home")
 
@@ -56,16 +55,10 @@ def checkout_home(request):
             email=guest_email.email
         )
 
-    if billing_profile is not None:
-        order_qs = Order.objects.filter(billing_profile=billing_profile, cart=cart, active=True)
-        if order_qs.count() == 1:
-            order = order_qs.first()
-        else:
-            old_order_qs = Order.objects.exclude(billing_profile=billing_profile) \
-                                        .filter(cart=cart, active=True)
-            if old_order_qs.exists():
-                old_order_qs.update(active=False)
-            order = Order.objects.create(billing_profile=billing_profile, cart=cart)
+    order = load_order(billing_profile=billing_profile, cart=cart)
+
+    print("checkout home")
+    print(f"order-{order}")
 
     context = {
         "order": order,

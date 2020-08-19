@@ -4,6 +4,7 @@ from typing import Union
 
 from orders.models import Order
 from products.models import Product
+from billing.models import BillingProfile
 from .models import Cart
 
 
@@ -48,12 +49,13 @@ def update_cart_part_of_session_data(request, cart:Union[Cart, None]=None) -> No
     print(f"\n\nRequest session cart_id={request.session.get('cart_id')}")
 
 
-def load_order(cart: Cart) -> Union[Order, None]:
-    """Return order if cart is not empty else None"""
-    if cart.products.count() == 0:
+def load_order(billing_profile: BillingProfile, cart: Cart) -> Union[Order, None]:
+    """Return order if cart and billing profile are not empty not empty else None"""
+    print("load_order")
+    if cart.products.count() == 0 or billing_profile is None:
         return None
     
-    order, order_created = Order.objects.get_or_create(cart=cart)
+    order = Order.objects.new_or_get(billing_profile=billing_profile, cart=cart)
     return order
 
 

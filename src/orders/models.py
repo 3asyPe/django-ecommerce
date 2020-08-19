@@ -16,16 +16,40 @@ ORDER_STATUS_CHOICES = (
 )
 
 
+class OrderManager(models.Manager):
+    def new_or_get(self, billing_profile: BillingProfile, cart: Cart):
+        print("\n\n order manager")
+        try:
+            order = self.get(cart=cart)
+        except Order.DoesNotExist:
+            order = None
+        print(f"billing_profile-{billing_profile}")
+        print(f"cart-{cart}")
+        print(f"order-{order}")
+
+        print("\n\n actions")
+        if order is None:
+            order = self.create(billing_profile=billing_profile, cart=cart)
+            print(f"created new order-{order}")
+        elif order.billing_profile != billing_profile:
+            order.delete()
+            print("deleted previous order")
+            print(f"order-{order}")
+            order = self.create(billing_profile=billing_profile, cart=cart)
+            print(f"created new order-{order}")
+        return order
+
+
 class Order(models.Model):
     order_id = models.CharField(max_length=120, blank=True)
     billing_profile = models.ForeignKey(BillingProfile, on_delete=models.CASCADE, null=True, blank=True)
     shipping_address = None
     billing_address = None
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    cart = models.OneToOneField(Cart, on_delete=models.CASCADE)
     status = models.CharField(max_length=120, default='created', choices=ORDER_STATUS_CHOICES)
     shipping_total = models.DecimalField(default=5.99, max_digits=100, decimal_places=2)
     total = models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
-    active = models.BooleanField(default=True)
+    objects = OrderManager()
 
     def __str__(self):
         return self.order_id
