@@ -3,8 +3,12 @@ from django.utils.http import is_safe_url
 
 from typing import Union
 
-from ecommerce.services import update_session_data
+from carts.services import update_cart_part_of_session_data
 from .models import GuestEmail
+
+
+def update_session_data(request):
+    update_cart_part_of_session_data(request)
 
 
 def custom_login(request, username: str, password: str) -> bool:
@@ -27,16 +31,6 @@ def get_next_path(request, base_url='/') -> str:
         return redirect_path
     else:
         return base_url
-
-
-def get_or_create_guest_email(request, email=None) -> Union[GuestEmail, None]:
-    email = request.session.get("guest_email") if email is None else email
-    print("get_guest_email")
-    if email is None:
-        return None
-    guest_email, guest_email_created = GuestEmail.objects.get_or_create(email=email)
-    request.session["guest_email"] = guest_email.email
-    return guest_email
 
 
 def _delete_guest_email_key(request):

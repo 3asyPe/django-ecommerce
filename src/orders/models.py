@@ -33,17 +33,20 @@ class OrderManager(models.Manager):
             order = self.create(billing_profile=billing_profile, cart=cart)
             print(f"created new order-{order}")
         elif order.billing_profile != billing_profile:
-            shipping_address = order.shipping_address
-            billing_address = order.billing_address
-            order.delete()
-            new_order = self.create(billing_profile=billing_profile, cart=cart)
-            new_order.shipping_address = shipping_address
-            new_order.billing_address = billing_address
-            print(f"order-{order}")
-            print("deleted previous order")
-            order = new_order
-            print(f"created new order-{order}")
+            order = self._create_order_using_and_deleting_previous(old_order=order)
         return order
+
+    def _create_order_using_and_deleting_previous(self, old_order):
+        shipping_address = old_order.shipping_address
+        billing_address = old_order.billing_address
+        old_order.delete()
+        print(f"order-{order}")
+        print("deleted previous order")
+        new_order = self.create(billing_profile=billing_profile, cart=cart)
+        new_order.shipping_address = shipping_address
+        new_order.billing_address = billing_address
+        print(f"created new order-{order}")
+        return new_order
 
 
 class Order(models.Model):

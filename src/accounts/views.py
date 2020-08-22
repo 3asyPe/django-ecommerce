@@ -5,7 +5,6 @@ from django.shortcuts import render, redirect
 from .services import (
     custom_login,
     get_next_path,
-    get_or_create_guest_email,
 )
 from .forms import LoginForm, RegisterForm, GuestForm
 from .models import GuestEmail
@@ -22,7 +21,7 @@ def guest_register_view(request):
 
     if form.is_valid():
         email = form.cleaned_data.get("email")
-        get_or_create_guest_email(request, email=email)
+        GuestEmail.objects.new_or_get(request, email=email)
         path = get_next_path(request)
         return redirect(path)
 

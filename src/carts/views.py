@@ -12,6 +12,7 @@ from .models import Cart
 from .services import (
     get_cart_and_update_session_data,
     update_cart_and_session_data,
+    do_checkout,
 )
 
 
@@ -40,14 +41,17 @@ def checkout_home(request):
     login_form = LoginForm()
     guest_form = GuestForm()
     address_form = AddressForm()
-    billing_address_id = request.session.get("billing_address_id", None)
-    shipping_address_id = request.session.get("shipping_address_id", None)
 
     billing_profile = load_billing_profile(request)
     order = load_order(billing_profile=billing_profile, cart=cart)
 
     print("checkout home")
     print(f"order-{order}")
+
+    if request.method == "POST":
+        success = do_checkout(request, order=order)
+        if success:
+            return redirect("/cart/success")
 
     context = {
         "order": order,

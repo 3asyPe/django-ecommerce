@@ -41,6 +41,10 @@
         <p>Cart Total: {{ order.cart.total }}</p>
         <p>Shipping Total: {{ order.shipping_total }}</p>
         <p>Order Total: {{ order.total }}</p>
+
+        <form action="" method="POST"> {% csrf_token %}
+            <button type="submit">Checkout</button>
+        </form>
     {% endif %}
 {% endif %}
 
