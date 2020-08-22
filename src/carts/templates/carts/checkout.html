@@ -17,11 +17,31 @@
         </div>
     </div>
 {% else %}
-    <h1>Checkout</h1>
+    {% if not order.shipping_address %}
+        <div class="row">
+            <div class="col-md-6 mx-auto col-10">
+                <p class="lead">Shipping Address</p>
+                <hr>
+                {% url "checkout_address_create" as checkout_address_create %}
+                {% include 'addresses/form.html' with form=address_form next_url=request.build_absolute_uri action_url=checkout_address_create address_type='shipping' %}
+            </div>
+        </div>
+    {% elif not order.billing_address %}
+        <div class="row">
+            <div class="col-md-6 mx-auto col-10">
+                <p class="lead">Billing Address</p>
+                <hr>
+                {% url "checkout_address_create" as checkout_address_create %}
+                {% include 'addresses/form.html' with form=address_form next_url=request.build_absolute_uri action_url=checkout_address_create address_type='billing' %}
+            </div>
+        </div>
+    {% else %}
+        <h1>Checkout</h1>
 
-    <p>Cart Total: {{ order.cart.total }}</p>
-    <p>Shipping Total: {{ order.shipping_total }}</p>
-    <p>Order Total: {{ order.total }}</p>
+        <p>Cart Total: {{ order.cart.total }}</p>
+        <p>Shipping Total: {{ order.shipping_total }}</p>
+        <p>Order Total: {{ order.total }}</p>
+    {% endif %}
 {% endif %}
 
 {% endblock %}

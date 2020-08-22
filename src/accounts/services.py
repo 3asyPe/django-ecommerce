@@ -18,7 +18,7 @@ def custom_login(request, username: str, password: str) -> bool:
     return False
 
 
-def get_next_path(request) -> str:
+def get_next_path(request, base_url='/') -> str:
     next_ = request.GET.get('next')
     next_post = request.POST.get("next")
     redirect_path = next_ or next_post or None
@@ -26,7 +26,7 @@ def get_next_path(request) -> str:
     if is_safe_url(redirect_path, request.get_host()):
         return redirect_path
     else:
-        return "/"
+        return base_url
 
 
 def get_or_create_guest_email(request, email=None) -> Union[GuestEmail, None]:
