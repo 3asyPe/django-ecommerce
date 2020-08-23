@@ -40,12 +40,12 @@ class OrderManager(models.Manager):
         shipping_address = old_order.shipping_address
         billing_address = old_order.billing_address
         old_order.delete()
-        print(f"order-{order}")
+        print(f"order-{old_order}")
         print("deleted previous order")
         new_order = self.create(billing_profile=billing_profile, cart=cart)
         new_order.shipping_address = shipping_address
         new_order.billing_address = billing_address
-        print(f"created new order-{order}")
+        print(f"created new order-{new_order}")
         return new_order
 
 

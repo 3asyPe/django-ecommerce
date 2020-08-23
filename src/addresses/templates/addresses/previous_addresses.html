@@ -1,0 +1,20 @@
+{% if addresses.exists %}
+    <form action="{{ action_url }}" method="POST"> {% csrf_token %}
+        {% if next_url %}
+            <input type="hidden" name="next" value="{{ next_url }}">
+        {% endif %}
+
+        {% if address_type %}
+            <input type="hidden" name="address_type" value="{{ address_type }}">
+        {% endif %}
+
+        <select name="address">
+            {% for address in addresses %}
+                <option value="{{ address.id }}">
+                    {{ address.address_line_1 }}
+                </option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn btn-success">Use Address</button>
+    </form>
+{% endif %}

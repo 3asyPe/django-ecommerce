@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from accounts.forms import LoginForm, GuestForm
 from accounts.models import GuestEmail
 from addresses.forms import AddressForm
+from addresses.services import get_addresses_by_billing_profile
 from billing.models import BillingProfile
 from billing.services import load_billing_profile
 from orders.models import Order
@@ -44,9 +45,11 @@ def checkout_home(request):
 
     billing_profile = load_billing_profile(request)
     order = load_order(billing_profile=billing_profile, cart=cart)
+    addresses = get_addresses_by_billing_profile(billing_profile=billing_profile)
 
     print("checkout home")
     print(f"order-{order}")
+    print(f"addresses-{addresses}")
 
     if request.method == "POST":
         success = do_checkout(request, order=order)
@@ -59,5 +62,6 @@ def checkout_home(request):
         "login_form": login_form,
         "guest_form": guest_form,
         "address_form": address_form,
+        "addresses": addresses,
     }
     return render(request, 'carts/checkout.html', context)
