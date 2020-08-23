@@ -1,7 +1,7 @@
 from django.db.models import QuerySet
 from django.forms.models import model_to_dict
 
-from typing import Union
+from typing import Union, Tuple
 
 from billing.models import BillingProfile
 from billing.services import load_billing_profile
@@ -18,13 +18,9 @@ def finalize_the_address(request, instance: Address, address_type="shipping") ->
     if billing_profile is not None:
         instance.billing_profile = billing_profile
         instance.address_type = address_type
+        print(f"instance_type-{instance.address_type}")
         instance = get_or_create_address(instance)
         add_address_to_order(request, address=instance)
-        set_shipping_address_as_active(
-            request,
-            shipping_address_id=instance.id,
-            address_type=instance.address_type
-        )
         print(f"\n\naddress saved-{instance}")
         return instance, True
     print("instance not saved")
@@ -67,4 +63,12 @@ def set_shipping_address_as_active(request, shipping_address_id: int, address_ty
     if shipping_address_id is not None:
         qs = Address.objects.filter(id=shipping_address_id)
         if qs.exists():
-            request.session[f"active_{address_type}_address_id"] = address.id
+            request.session[f"active_{address_type}_address_id"] = shipping_address_id
+
+
+def devide_addresses_on_shipping_and_billing(addresses) -> Union[Tuple[set, set], Tuple[None, None]]:
+    if addresses is None or not addresses.exists():
+        return None, None
+    shipping_addresses = addresses.filter(address_type="shipping")
+    billing_addresses = addresses.filter(address_type="billing")
+    return shipping_addresses, billing_addresses

@@ -3,7 +3,10 @@ from django.shortcuts import render, redirect
 from accounts.forms import LoginForm, GuestForm
 from accounts.models import GuestEmail
 from addresses.forms import AddressForm
-from addresses.services import get_addresses_by_billing_profile
+from addresses.services import (
+    get_addresses_by_billing_profile,
+    devide_addresses_on_shipping_and_billing,
+)
 from billing.models import BillingProfile
 from billing.services import load_billing_profile
 from orders.models import Order
@@ -46,15 +49,20 @@ def checkout_home(request):
     billing_profile = load_billing_profile(request)
     order = load_order(billing_profile=billing_profile, cart=cart)
     addresses = get_addresses_by_billing_profile(billing_profile=billing_profile)
+    shipping_addresses, billing_addresses = devide_addresses_on_shipping_and_billing(
+        addresses=addresses
+    )
 
     print("checkout home")
     print(f"order-{order}")
     print(f"addresses-{addresses}")
+    print(f"shipping_addresses-{shipping_addresses}")
+    print(f"billing_addresses-{billing_addresses}")
 
     if request.method == "POST":
         success = do_checkout(request, order=order)
         if success:
-            return redirect("/cart/success")
+            return redirect("cart:success")
 
     context = {
         "order": order,
@@ -62,6 +70,11 @@ def checkout_home(request):
         "login_form": login_form,
         "guest_form": guest_form,
         "address_form": address_form,
-        "addresses": addresses,
+        "shipping_addresses": shipping_addresses,
+        "billing_addresses": billing_addresses,
     }
     return render(request, 'carts/checkout.html', context)
+
+
+def checkout_done(request):
+    return render(request, 'carts/checkout-done.html', {})
