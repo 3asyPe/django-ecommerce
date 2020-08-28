@@ -50,11 +50,11 @@
 
                 <li class="nav-item {% if request.path == cart_url %} active {% endif %}">
                     <a class="nav-link" href="{{ cart_url }}">
-                        {% if request.session.cart_items_count %}
-                            {{ request.session.cart_items_count }} 
-                        {% else %}
-                            0
-                        {% endif %}
+                        <span class="navbar-cart-count">    
+                            {% if request.session.cart_items_count %}
+                                {{ request.session.cart_items_count }} 
+                            {% endif %}
+                        </span>
                         <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                     </a>
                 </li>

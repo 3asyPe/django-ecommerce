@@ -3,10 +3,10 @@
 {% block content %}
 
     <div class="row">
-        {% for obj in object_list%}
+        {% for obj in products_list %}
             <div class="col">
                 {{ forloop.counter }}
-                {% include 'products/snippets/card.html' with instance=obj %}
+                {% include 'products/snippets/card.html' with instance=obj cart=cart %}
             </div>
         {% endfor %}
     </div>

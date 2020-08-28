@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
 from accounts.forms import LoginForm, GuestForm
@@ -20,6 +21,23 @@ from .services import (
 )
 
 
+def cart_detail_api_view(request):
+    cart = get_cart_and_update_session_data(request)
+    products = [{
+        "id": p.id,
+        "url": p.get_absolute_url(),
+        "name": p.title,
+        "price": p.price
+        } for p in cart.products.all()
+    ]
+    cart_data = {
+        "products": products,
+        "subtotal": cart.subtotal,
+        "total": cart.total,
+    }
+    return JsonResponse(cart_data)
+
+
 def cart_home(request):
     cart = get_cart_and_update_session_data(request)
     print("\n\n cart_home")
@@ -33,7 +51,15 @@ def cart_home(request):
 def cart_update(request):
     if request.POST:
         product_id = request.POST.get("product_id")
-        cart = update_cart_and_session_data(request, product_id=product_id)  
+        cart, product_added = update_cart_and_session_data(request, product_id=product_id)  
+        if request.is_ajax():
+            print("\n\nAJAX REQUEST\n\n")
+            json_data = {
+                "added": product_added,
+                "removed": not product_added,
+                "cartItemCount": cart.products.count(),
+            }
+            return JsonResponse(json_data)
     return redirect("cart:home") 
 
 
@@ -66,10 +92,10 @@ def checkout_home(request):
 
     context = {
         "order": order,
-        'billing_profile': billing_profile,
         "login_form": login_form,
         "guest_form": guest_form,
         "address_form": address_form,
+        'billing_profile': billing_profile,
         "shipping_addresses": shipping_addresses,
         "billing_addresses": billing_addresses,
     }

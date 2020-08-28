@@ -17,11 +17,11 @@ def get_cart_and_update_session_data(request) -> Cart:
     return cart
 
 
-def update_cart_and_session_data(request, product_id:int) -> Cart:
+def update_cart_and_session_data(request, product_id:int) -> (Cart, bool):
     cart = _get_cart(request)
-    update_cart(product_id=product_id, cart=cart)
+    cart, product_added = update_cart(product_id=product_id, cart=cart)
     update_cart_part_of_session_data(request, cart)
-    return cart
+    return cart, product_added
 
 
 def load_cart(user: User, cart_id: Union[int, None]) -> Cart:
@@ -30,14 +30,14 @@ def load_cart(user: User, cart_id: Union[int, None]) -> Cart:
     return cart
     
 
-def update_cart(product_id: int, cart: Cart) -> Cart:
+def update_cart(product_id: int, cart: Cart) -> (Cart, bool):
     product = Product.objects.get(id=product_id)
     if product in cart.products.all():
         cart.products.remove(product)
+        return cart, False
     else:
         cart.products.add(product)
-    print(cart.products.all())
-    return cart
+        return cart, True
 
 
 def update_cart_part_of_session_data(request, cart:Union[Cart, None]=None) -> None:

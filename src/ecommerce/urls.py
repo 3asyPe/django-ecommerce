@@ -30,6 +30,8 @@ from addresses.views import (
     checkout_address_reuse_view,
 )
 
+from carts.views import cart_detail_api_view
+
 from .views import (
     home_page,
     about_page,
@@ -49,6 +51,7 @@ urlpatterns = [
     path("register/", register_page, name="register"),
     path("products/", include("products.urls")),
     path("search/", include("search.urls")),
+    path("api/cart/", cart_detail_api_view, name="api-cart"),
     path("cart/", include("carts.urls")),
     path('admin/', admin.site.urls),
 ]
