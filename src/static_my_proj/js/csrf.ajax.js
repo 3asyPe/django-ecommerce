@@ -1,4 +1,4 @@
-$.document.ready(function(){
+$(document).ready(function(){
         
     // using jQuery
     function getCookie(name) {

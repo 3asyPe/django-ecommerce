@@ -1,0 +1,58 @@
+[
+{
+    "model": "products.product",
+    "pk": 1,
+    "fields": {
+        "title": "Cucumber",
+        "slug": "cucumber",
+        "description": "Yummy cucumber!",
+        "price": "100.00",
+        "image": "products/11690382/11690382.jpg",
+        "featured": false,
+        "active": true,
+        "timestamp": "2020-08-03T12:24:32.702Z"
+    }
+},
+{
+    "model": "products.product",
+    "pk": 2,
+    "fields": {
+        "title": "Computer",
+        "slug": "computer",
+        "description": "Super computer",
+        "price": "10000.00",
+        "image": "",
+        "featured": true,
+        "active": true,
+        "timestamp": "2020-08-03T12:24:32.702Z"
+    }
+},
+{
+    "model": "products.product",
+    "pk": 3,
+    "fields": {
+        "title": "abc",
+        "slug": "abc-e6gz",
+        "description": "fasd",
+        "price": "39.99",
+        "image": "",
+        "featured": false,
+        "active": true,
+        "timestamp": "2020-08-03T12:24:32.702Z"
+    }
+},
+{
+    "model": "products.product",
+    "pk": 4,
+    "fields": {
+        "title": "Lorem Ipsum",
+        "slug": "lorem-ipsum",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ac metus ut sem mattis pulvinar. Etiam placerat lacinia nulla ultricies malesuada. Sed accumsan mauris eu ipsum dignissim pharetra. Integer sodales ac ante ac lobortis. Aenean fringilla ac magna et pellentesque. Donec sed pretium ante. Nulla efficitur dolor non dui condimentum dignissim. Donec porttitor aliquet erat, ut interdum purus laoreet sit amet. Mauris vitae tellus gravida, convallis lacus vitae, condimentum leo. Nullam id sollicitudin purus.\r\n\r\nDonec ligula nulla, fermentum ac vehicula ac, tristique id mauris. Maecenas consectetur fermentum sem a eleifend. Aenean in convallis augue. Vivamus eget justo ipsum. Quisque volutpat pulvinar mi, eu efficitur lorem egestas non. Nam felis lacus, feugiat eget diam fringilla, imperdiet finibus ipsum. Aliquam ac mollis tortor, eu tincidunt tortor. Mauris consectetur iaculis libero id viverra.\r\n\r\nAliquam ut sem nisi. Pellentesque vitae urna ut nisl commodo dictum. Duis suscipit erat mauris, a mattis elit ultrices a. Sed facilisis massa et sapien semper gravida. Donec posuere ante ut fringilla semper. Vestibulum massa odio, cursus in vulputate id, mollis in sem. Quisque at magna et sem accumsan cursus. Etiam gravida, odio quis posuere condimentum, turpis erat tempus urna, facilisis vehicula massa lorem eleifend arcu.\r\n\r\nUt in bibendum mi. Suspendisse potenti. Vestibulum mauris est, laoreet et justo vitae, pretium vehicula massa. Ut ante neque, convallis id nisi vitae, fringilla tincidunt ipsum. Aliquam tincidunt nisl nec dolor tincidunt consequat. Aliquam erat volutpat. Cras vitae porta metus. Proin ultrices metus sed tortor mollis congue. Fusce ultrices diam ante, eu feugiat nisi pharetra sed. Donec malesuada purus nunc, et rutrum dolor finibus egestas.\r\n\r\nAenean tincidunt mi eget vestibulum pharetra. Donec nibh arcu, pharetra vel commodo id, condimentum feugiat orci. Nulla fermentum, sem ut rhoncus ultricies, eros nisl tincidunt felis, a pretium est diam ut mi. Cras ex elit, fringilla vitae enim ut, imperdiet finibus enim. Donec lobortis feugiat ipsum, et ullamcorper arcu accumsan non. Etiam aliquet, arcu a finibus porttitor, felis ante suscipit leo, a bibendum metus lorem ac ante. Ut fermentum arcu sed accumsan porttitor. Donec justo lacus, suscipit dapibus augue ac, ultricies vehicula massa. Donec sed tortor ipsum.",
+        "price": "1091.97",
+        "image": "",
+        "featured": false,
+        "active": true,
+        "timestamp": "2020-08-03T12:24:32.702Z"
+    }
+}
+]
