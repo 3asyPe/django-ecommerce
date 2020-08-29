@@ -27,6 +27,65 @@
 
 <script>
     $(document).ready(() => {
+        // Contact form Handler
+        var contactForm = $(".contact-form")
+        var contactFormMethod = contactForm.attr("method")
+        var contactFormEndpoint = contactForm.attr("action")
+        var contactFormSubmitBtn = contactForm.find("[type='submit']")
+        var contactFormSubmitBtnTxt = contactFormSubmitBtn.text()
+
+        function displaySubmitting(submitBtn, defaultText, doSubmit){
+            if (doSubmit){
+                submitBtn.addClass("disabled")
+                submitBtn.html("<i class='fa fa-spin fa-spinner'></i> Submitting...")
+            }
+            else{
+                submitBtn.remove("disabled")
+                submitBtn.html(defaultText)
+            }
+        }
+
+        contactForm.submit(function(event){
+            event.preventDefault()
+            var contactFormData = contactForm.serialize()
+            var thisForm =$(this)
+            displaySubmitting(contactFormSubmitBtn, contactFormSubmitBtnTxt, true)
+            $.ajax({
+                method: contactFormMethod,
+                url: contactFormEndpoint,
+                data: contactFormData,
+                success: (data) => {
+                    thisForm[0].reset()
+                    $.alert({
+                        title: "Success!",
+                        content: data.message,
+                        theme: "modern",
+                    })
+                    setTimeout(() => {
+                        displaySubmitting(contactFormSubmitBtn, contactFormSubmitBtnTxt, false)
+                    }, 2000)
+                },
+                error: (error) => {
+                    console.log(error.responseJSON)
+                    var jsonData = error.responseJSON
+                    var msg = ""
+
+                    $.each(jsonData, function(key, value){
+                        msg += key + ": " + value[0].message + "<br>"
+                    })
+                    $.alert({
+                        title: "Oops!",
+                        content: msg,
+                        theme: "modern",
+                    })
+                    setTimeout(() => {
+                        displaySubmitting(contactFormSubmitBtn, contactFormSubmitBtnTxt, false)
+                    }, 2000)
+                }
+            })
+        })
+
+
         // Auto Search
         var searchForm = $(".search-form")
         var searchInput = searchForm.find("[name='q']")
@@ -102,7 +161,7 @@
                     $.alert({
                         title: "Oops!",
                         content: "An error occured",
-                        theme: "modern!",
+                        theme: "modern",
                     })
                     console.log("error");
                     console.log(errorData);
@@ -156,6 +215,11 @@
                     }
                 },
                 error: function(errorData){
+                    $.alert({
+                        title: "Oops!",
+                        content: "An error occured",
+                        theme: "modern",
+                    })
                     console.log("error");
                     console.log(errorData);
                 }
