@@ -82,7 +82,7 @@ class User(AbstractBaseUser):
         return self.admin
         
     @property
-    def is_staff(self):
+    def is_active(self):
         return self.active
 
 

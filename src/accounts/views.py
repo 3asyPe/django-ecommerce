@@ -35,9 +35,9 @@ def login_page(request):
     }
 
     if form.is_valid():
-        email = form.cleaned_data.get("email")
+        username = form.cleaned_data.get("username")
         password = form.cleaned_data.get("password")
-        logged_in = custom_login(request, email=email, password=password)
+        logged_in = custom_login(request, username=username, password=password)
         if logged_in:
             path = get_next_path(request)
             return redirect(path)
@@ -54,9 +54,8 @@ def register_page(request):
         "form": form
     }
     if form.is_valid():
-        username = form.cleaned_data.get("username")
-        email = form.cleaned_data.get("email")
-        password = form.cleaned_data.get("password")
-        user = User.objects.create_user(username, email, password)
+        user = form.save()
+        if user:
+            return redirect("/login/")
     
     return render(request, "accounts/register.html", context)
