@@ -11,8 +11,8 @@ def update_session_data(request):
     update_cart_part_of_session_data(request)
 
 
-def custom_login(request, username: str, password: str) -> bool:
-    user = authenticate(request, username=username, password=password)
+def custom_login(request, email: str, password: str) -> bool:
+    user = authenticate(request, email=email, password=password)
     if user is not None:
         login(request=request, user=user)
         _delete_guest_email_key(request)
