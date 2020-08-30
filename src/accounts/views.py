@@ -2,11 +2,11 @@ from django.contrib.auth import get_user_model
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
+from .forms import LoginForm, RegisterForm, GuestForm
 from .services import (
     custom_login,
     get_next_path,
 )
-from .forms import LoginForm, RegisterForm, GuestForm
 from .models import GuestEmail
 
 

@@ -12,7 +12,6 @@ from .models import Order
 User = settings.AUTH_USER_MODEL
 
 
-
 def load_order(billing_profile: BillingProfile, cart: Cart) -> Union[Order, None]:
     """Return order if cart and billing profile are not empty not empty else None"""
     print("load_order")
@@ -56,3 +55,15 @@ def mark_order_as_paid(order: Order) -> str:
         order.status = "paid"
         order.save()
     return order.status
+
+
+def unique_order_id_generator(instance):
+    from ecommerce.utils import random_string_generator
+
+    order_new_id = random_string_generator()
+
+    Klass = instance.__class__
+    qs_exists = Klass.objects.filter(order_id=order_new_id).exists()
+    if qs_exists:
+        return unique_slug_generator(instance, new_slug=new_slug)
+    return order_new_id

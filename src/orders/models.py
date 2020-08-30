@@ -6,7 +6,6 @@ from math import fsum
 from addresses.models import Address
 from billing.models import BillingProfile
 from carts.models import Cart
-from ecommerce.utils import unique_order_id_generator
 
 
 ORDER_STATUS_CHOICES = (
@@ -75,6 +74,8 @@ class Order(models.Model):
 
 def pre_save_create_order_id(sender, instance: Order, *args, **kwargs):
     if not instance.order_id:
+        from .services import unique_order_id_generator
+        
         instance.order_id = unique_order_id_generator(instance)
 
 

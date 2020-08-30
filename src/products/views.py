@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import Http404
 
+from analytics.services import send_object_viewed_data_to_analytics 
 from carts.services import get_cart_and_update_session_data
 
 from .models import Product
@@ -19,7 +20,10 @@ def product_list_view(request):
 
 def product_detail_slug_view(request, slug:str):
     product = get_product_by_slug(slug=slug)
+    if product is None:
+        raise Http404(f"Product with slug-{slug} doesn't exist")
     cart = get_cart_and_update_session_data(request)
+    send_object_viewed_data_to_analytics(instance=product, request=request)
     context = {
         'object': product,
         'cart': cart,
