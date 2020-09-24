@@ -39,12 +39,17 @@ def object_viewed_receiver(sender, instance, request, *args, **kwargs):
     print(instance)
     print(request)
     print(request.user)
+    user = request.user
+    if not user.is_authenticated:
+        user = None
+    print(f"\n\nUSER-{user}")
     new_view_obj = ObjectViewed.objects.create(
-        user=request.user,
+        user=user,
         content_type=c_type,
         object_id=instance.id,
         ip_address=get_client_ip(request),
     )
+    print(new_view_obj)
 
 
 object_viewed_signal.connect(object_viewed_receiver)

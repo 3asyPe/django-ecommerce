@@ -23,7 +23,9 @@ def product_detail_slug_view(request, slug:str):
     if product is None:
         raise Http404(f"Product with slug-{slug} doesn't exist")
     cart = get_cart_and_update_session_data(request)
+    print("\n\nbefore send_object_to...")
     send_object_viewed_data_to_analytics(instance=product, request=request)
+    print("\n\nafter send_object_to...")
     context = {
         'object': product,
         'cart': cart,

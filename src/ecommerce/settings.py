@@ -54,6 +54,10 @@ AUTH_USER_MODEL = "accounts.User"
 FORCE_SESSION_TO_ONE = False
 FORCE_INACTIVE_USER_ENDSESSION = False
 
+STRIPE_SECRET_KEY = "sk_test_51HM8xIJWpkfHiKdZvgmZL84WTT571TOqAYHBN8xa9bp3kbv7XPKdjOJrfFFB4fJLx3SnUntrn5gAzQXaLuYjPY7g00n24pSpRM"
+STRIPE_PUB_KEY = "pk_test_51HM8xIJWpkfHiKdZEUZVRXvZ2s7OP436CgUBwWquikW7fM73zwcwzEJkNcapaluBP6nEQ2LeHNMhGldmbpm405G300qiWFX2cN"
+
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

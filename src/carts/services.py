@@ -57,15 +57,19 @@ def delete_cart_part_of_session_data(request):
 def do_checkout(request, order: Order) -> bool:
     order_is_done = check_order_done(order)
     if order_is_done:
-        mark_order_as_paid(order)
-        cart = order.cart
-        _unactivate_cart(cart=cart)
-        delete_cart_part_of_session_data(request)
-        return True
+        charged, charge_msg = order.billing_profile.charge(order)
+        if charged:
+            mark_order_as_paid(order)
+            cart = order.cart
+            _deactivate_cart(cart=cart)
+            delete_cart_part_of_session_data(request)
+            return True
+        else:
+            print(charge_msg)
     return False
 
 
-def _unactivate_cart(cart: Cart):
+def _deactivate_cart(cart: Cart):
     cart.active = False
     cart.save()
 

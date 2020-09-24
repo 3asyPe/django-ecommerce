@@ -53,24 +53,30 @@
         </div>
     {% else %}
         <h1>Checkout</h1>
-        <p>
-            Cart Items: 
-            {% for product in order.cart.products.all %}
-                {{ product }}
-                {% if not forloop.last %}
-                    , 
-                {% endif %}
-            {% endfor %}
-        </p>
-        <p>Shipping Address: {{ order.shipping_address.get_address }}</p>
-        <p>Billing Address: {{ order.billing_address.get_address }}</p>
-        <p>Cart Total: {{ order.cart.total }}</p>
-        <p>Shipping Total: {{ order.shipping_total }}</p>
-        <p>Order Total: {{ order.total }}</p>
+        {% if not has_card %}
+            <div class="stripe-payment-form"  data-token="{{ publish_key }}"
+                 data-next-url="{{ request.build_absolute_uri }}" data-btn-title="Add Payment Method">
+            </div>
+        {% else %}
+            <p>
+                Cart Items: 
+                {% for product in order.cart.products.all %}
+                    {{ product }}
+                    {% if not forloop.last %}
+                        , 
+                    {% endif %}
+                {% endfor %}
+            </p>
+            <p>Shipping Address: {{ order.shipping_address.get_address }}</p>
+            <p>Billing Address: {{ order.billing_address.get_address }}</p>
+            <p>Cart Total: {{ order.cart.total }}</p>
+            <p>Shipping Total: {{ order.shipping_total }}</p>
+            <p>Order Total: {{ order.total }}</p>
 
-        <form action="" method="POST"> {% csrf_token %}
-            <button class="btn btn-success" type="submit">Checkout</button>
-        </form>
+            <form action="" method="POST"> {% csrf_token %}
+                <button class="btn btn-success" type="submit">Checkout</button>
+            </form>
+        {% endif %}
     {% endif %}
 {% endif %}
 

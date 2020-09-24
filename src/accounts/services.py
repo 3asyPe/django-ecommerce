@@ -29,6 +29,7 @@ def custom_login(request, username: str, password: str) -> bool:
 
 
 def get_next_path(request, base_url='/') -> str:
+    next_ = None
     next_ = request.GET.get('next')
     next_post = request.POST.get("next")
     redirect_path = next_ or next_post or None
