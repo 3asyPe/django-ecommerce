@@ -57,12 +57,15 @@ def delete_cart_part_of_session_data(request):
 def do_checkout(request, order: Order) -> bool:
     order_is_done = check_order_done(order)
     if order_is_done:
-        charged, charge_msg = order.billing_profile.charge(order)
+        billing_profile = order.billing_profile
+        charged, charge_msg = billing_profile.charge(order)
         if charged:
             mark_order_as_paid(order)
             cart = order.cart
             _deactivate_cart(cart=cart)
             delete_cart_part_of_session_data(request)
+            if not billing_profile.user:
+                billing_profile.set_cards_inactive()
             return True
         else:
             print(charge_msg)
